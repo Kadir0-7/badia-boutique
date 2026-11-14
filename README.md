@@ -47,6 +47,23 @@ The Express server then serves the built app and the API from one port. Put it b
 (the session cookie is HTTPS-only in production) and set `PUBLIC_URL`.
 Keep `data/` and `uploads/` on persistent storage and back them up.
 
+### Security checklist for going live
+- [ ] Start with an empty database, or run `npm run remove-demo` to delete the demo sellers. In production demo accounts are never created and can't sign in, and the server warns at startup if any remain.
+- [ ] Set `NODE_ENV=production`. This turns on the HTTPS redirect, HSTS and HTTPS-only cookies.
+- [ ] Set `STRIPE_SECRET_KEY` (and `STRIPE_WEBHOOK_SECRET`). The server warns if production is running in payment test mode.
+- [ ] Keep `.env` on the server only. Never commit it.
+- [ ] Turn on two-factor sign-in for GitHub, Stripe and your hosting account.
+- [ ] Turn on Dependabot alerts in the GitHub repository settings.
+- [ ] Schedule daily backups of `data/` and `uploads/` to private, encrypted storage.
+
+### Security already built in
+- Passwords hashed with bcrypt. Sessions in httpOnly, SameSite=Lax cookies.
+- Rate limits on sign-in, sign-up and the whole API.
+- Strict security headers via helmet: Content Security Policy, HSTS, no framing, nosniff.
+- Uploaded photos are re-encoded, which strips EXIF metadata including GPS location, and fakes are rejected.
+- Ownership checks on every edit, delete, message and order action. Addresses are shown to sellers only after payment. Gender is never public.
+- Login `?next=` redirects only go to pages on this site.
+
 ## Structure
     server/
       index.js          app setup, security headers, error handler, serves dist/ in production
@@ -70,7 +87,9 @@ Keep `data/` and `uploads/` on persistent storage and back them up.
 ## Still to do before a public launch
 - **Seller payouts:** Stripe Connect onboarding for sellers, plus a platform fee.
 - **Email:** password reset, email verification, and alerts for new messages and orders.
-- **Photo storage:** move uploads to S3, Cloudinary or similar, and resize or compress images.
+- **Accounts:** change password, delete account, and download my data (needed for UK/EU GDPR).
+- **Privacy:** a privacy policy, and deleting old shipping addresses some months after delivery.
+- **Photo storage:** move uploads to S3, Cloudinary or similar.
 - **Shipping:** postage costs and labels (Shippo or EasyPost, for example).
 - **Trust and safety:** report listings or users, an admin dashboard, and refunds or disputes.
 - **Legal:** terms of service, privacy policy, prohibited-items policy.

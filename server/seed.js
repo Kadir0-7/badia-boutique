@@ -54,8 +54,17 @@ function insertDemoListings() {
 
 const markDone = db.prepare("INSERT OR REPLACE INTO meta(key,value) VALUES(?,?)");
 
+// Demo data is for local development only. It's off in production unless
+// SEED_DEMO=true is set on purpose, and SEED_DEMO=false turns it off locally.
+const demoWanted = () => process.env.SEED_DEMO ? process.env.SEED_DEMO === "true" : process.env.NODE_ENV !== "production";
+
 function seedIfEmpty() {
   if (db.prepare("SELECT COUNT(*) n FROM users").get().n === 0) {
+    if (!demoWanted()) {
+      for (const [key, value] of STEPS) markDone.run(key, value);
+      console.log("Empty database, no demo data (production).");
+      return;
+    }
     const hash = bcrypt.hashSync(DEMO_PASSWORD, 10);
     const addUser = db.prepare("INSERT INTO users(id,email,handle,passwordHash,bio,createdAt) VALUES(?,?,?,?,?,?)");
     db.transaction(() => {

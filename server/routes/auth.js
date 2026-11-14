@@ -39,6 +39,9 @@ router.post("/login", limiter, wrap(async (req, res) => {
   const password = typeof b.password === "string" ? b.password : "";
   const user = db.prepare("SELECT * FROM users WHERE email=?").get(email);
   if (!user || !(await checkPassword(password, user.passwordHash))) fail(401, "Wrong email or password");
+  // Demo sellers share a password that's published in the README, so they can
+  // never sign in on the live site.
+  if (process.env.NODE_ENV === "production" && user.id.startsWith("demo-")) fail(401, "Wrong email or password");
   createSession(res, user.id);
   res.json({ user: publicUser(user) });
 }));

@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { db } = require("../db");
 const { requireUser } = require("../auth");
-const { upload, publicPath, removePhotos, MAX_PHOTOS } = require("../uploads");
+const { upload, cleanPhotos, publicPath, removePhotos, MAX_PHOTOS } = require("../uploads");
 const { SELECT, shape, getListing, likedSet } = require("../listings");
 const { CATS, SECTIONS, CONDS, NEW_CONDS, readSize, id, now, str, oneOf, money, fail } = require("../util");
 const { readProfile } = require("./me");
@@ -12,6 +12,7 @@ const likeEsc = s => s.replace(/[\\%_]/g, c => "\\" + c);
 // that were just uploaded are deleted so nothing is left orphaned on disk.
 const withPhotos = handler => [
   upload.array("photos", MAX_PHOTOS),
+  cleanPhotos,
   (req, res, next) => new Promise(ok => ok(handler(req, res))).catch(err => {
     removePhotos((req.files || []).map(publicPath));
     next(err);

@@ -4,8 +4,16 @@ import { useAuth } from "../auth.jsx";
 import { ErrorText } from "../components/ui.jsx";
 import { DISCLAIMER } from "../constants.js";
 
-// Only follow ?next= links that stay on this site.
-const safeNext = n => (n && n.startsWith("/") && !n.startsWith("//") ? n : "/");
+// Only follow ?next= links that stay on this site. Browsers treat "/\evil.com"
+// like "//evil.com" (another website), so backslashes, control characters and
+// anything that doesn't resolve to our own origin are rejected.
+export function safeNext(n) {
+  if (typeof n !== "string" || !n.startsWith("/") || n.startsWith("//") || /[\\\u0000-\u001f\u007f]/.test(n)) return "/";
+  try {
+    const u = new URL(n, window.location.origin);
+    return u.origin === window.location.origin ? u.pathname + u.search + u.hash : "/";
+  } catch { return "/"; }
+}
 
 function useAuthForm() {
   const [params] = useSearchParams();
