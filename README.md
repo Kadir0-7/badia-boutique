@@ -1,12 +1,16 @@
-# Thriftline
+# Badia Boutique
 
-Resale marketplace (Depop / Mercari style) with a feed ranked by each shopper's saved taste.
+A marketplace for new and used modest clothing for men, women and kids, with a feed ranked by each shopper's saved taste.
 React (Vite) frontend, Express + SQLite backend.
 
+© Badia Boutique. Owned by Abdikadir.
+
 ## Features
-- **Accounts:** sign up / sign in with email and password (bcrypt hashes, httpOnly session cookie, rate-limited).
-- **Listings:** up to 6 photos each, edit and delete your own, search, filter by category and size, sort by price.
-- **For you feed:** ranked on the server from your categories, sizes, brands, condition and budget, showing why each item matched.
+- **Accounts:** sign up / sign in with email and password (bcrypt hashes, httpOnly session cookie, rate-limited). Sign-up asks for gender and requires accepting the modest-clothing disclaimer.
+- **Listings:** up to 6 photos each, edit and delete your own, search, sort by price.
+- **Sections and categories:** every listing is for Men, Women or Kids. Categories include thobes, abayas, jilbabs, hijabs & scarves, dresses and more. Quick filters: Men · Women · Kids · Thobes · Abayas · New · Used.
+- **Sizes:** thobes and abayas use length (20–64 inches). Other clothing uses XS–XL or a size the seller types, such as 30/30 or UK 10.
+- **For you feed:** ranked on the server by who you shop for, your categories, sizes, brands, condition and budget, showing why each item matched.
 - **Saved items:** heart anything and find it later.
 - **Messaging:** buyer and seller threads per listing, with unread counts.
 - **Checkout:** shipping address plus Stripe Checkout. The item is held for 30 minutes while the buyer pays.

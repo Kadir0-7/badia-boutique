@@ -61,6 +61,6 @@ app.use((err, _req, res, _next) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Thriftline API on http://localhost:${PORT}`);
+  console.log(`Badia Boutique API on http://localhost:${PORT}`);
   console.log(payments.enabled ? "Payments: Stripe Checkout" : "Payments: TEST MODE (set STRIPE_SECRET_KEY for real payments)");
 });

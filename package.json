@@ -1,8 +1,8 @@
 {
-  "name": "thriftline",
+  "name": "badia-boutique",
   "version": "2.0.0",
   "private": true,
-  "description": "Resale marketplace with a preference-driven feed",
+  "description": "Marketplace for new and used modest clothing",
   "main": "server/index.js",
   "scripts": {
     "dev": "concurrently -k -n api,web -c blue,magenta \"node --watch server/index.js\" \"vite\"",
